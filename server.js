@@ -1,8 +1,19 @@
 const grpc = require("@grpc/grpc-js");
 const protoLoader = require("@grpc/proto-loader");
+const { connectToMongo } = require("./mongoose.connection");
+const {
+  listProduct,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} = require("./services/product/product.rpc");
 
+connectToMongo(
+  "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.5"
+);
 // Load the proto file
-const packageDefinition = protoLoader.loadSync("echo.proto", {
+const productDefinition = protoLoader.loadSync("./protos/product.proto", {
   keepCase: true,
   longs: String,
   enums: String,
@@ -10,26 +21,21 @@ const packageDefinition = protoLoader.loadSync("echo.proto", {
   oneofs: true,
 });
 
-const exampleProto = grpc.loadPackageDefinition(packageDefinition).example;
-
-// Implement the SayHello RPC method
-function sayHello(call, callback) {
-  const { name, family, age } = call.request;
-  console.log(call.request);
-  if (age >= 18) {
-    callback(null, { message: `Hello, ${name} ${family}!,` });
-  } else {
-    callback(null, { message: `you are under age` });
-  }
-}
+const { productPackage } = grpc.loadPackageDefinition(productDefinition);
 
 // Create the server
 const server = new grpc.Server();
 
-server.addService(exampleProto.ExampleService.service, { SayHello: sayHello });
+server.addService(productPackage.ProductService.service, {
+  listProduct,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+});
 
 // Start the server
-const port = "3000";
+const port = "3200";
 server.bindAsync(
   `0.0.0.0:${port}`,
   grpc.ServerCredentials.createInsecure(),
