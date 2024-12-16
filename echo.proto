@@ -1,5 +1,4 @@
 syntax = "proto3";
-
 package example;
 
 // Define the service
@@ -10,6 +9,9 @@ service ExampleService {
 // Define the request message
 message HelloRequest {
   string name = 1;
+  string family =2;
+  int32 age = 3;
+
 }
 
 // Define the response message
