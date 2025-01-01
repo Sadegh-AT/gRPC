@@ -2,33 +2,34 @@ syntax="proto3";
 package productPackage;
 
 message Product {
-    string _id = 1;
+    string id = 1;
     string title = 2;
-    int32 price =3;
+    int32 price = 3;
 }
-message ProductId{
-    string _id =1;
+
+message ProductId {
+    string id = 1;
 }
 
 message ProductList {
-    repeated Product products =1;
-
+    repeated Product products = 1;
 }
 
 message CreateProduct {
-    string title =1;
+    string title = 1;
     int32 price = 2;
 }
-message Empty{}
-message Result{
+
+message Empty {}
+
+message Result {
     string status = 1;
-    
 }
 
 service ProductService {
     rpc listProduct (Empty) returns (ProductList);
     rpc getProduct (ProductId) returns (Product);
     rpc createProduct (CreateProduct) returns (Result);
-    rpc updateProduct (Product) returns (Result);
+    rpc updateProduct (Product) returns (Product);
     rpc deleteProduct (ProductId) returns (Result);
 }

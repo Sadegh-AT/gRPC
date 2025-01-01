@@ -1,0 +1,17 @@
+syntax="proto3";
+package echoPackage;
+message EchoMesssage{
+    string value = 1;
+
+}
+message EchoMesssageArray{
+    repeated string names = 1;
+
+}
+
+service EchoService{
+    rpc EchoUnray (EchoMesssage) returns (EchoMesssage);
+    rpc EchoClientStream (stream EchoMesssage) returns (EchoMesssageArray);
+    rpc EchoServerStream (EchoMesssage) returns ( stream EchoMesssageArray);
+    rpc EchoBidiStream (stream EchoMesssage) returns (stream EchoMesssage);
+}

@@ -1,19 +1,18 @@
 const grpc = require("@grpc/grpc-js");
 const protoLoader = require("@grpc/proto-loader");
-const { connectToMongo } = require("./mongoose.connection");
+const { connectToMongo } = require("./src/utils/mongoose.connection");
 const {
   listProduct,
   getProduct,
   createProduct,
   updateProduct,
   deleteProduct,
-} = require("./services/product/product.rpc");
+} = require("./src/rpc/product.rpc");
 
-connectToMongo(
-  "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.5"
-);
+connectToMongo("mongodb://127.0.0.1:27017");
+
 // Load the proto file
-const productDefinition = protoLoader.loadSync("./protos/product.proto", {
+const productDefinition = protoLoader.loadSync("./src/protos/product.proto", {
   keepCase: true,
   longs: String,
   enums: String,
